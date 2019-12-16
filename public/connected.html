@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <script>
-        let parseQueryString = function( queryString ) {
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js"
+		integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+	<script>
+		let parseQueryString = function (queryString) {
 			let params = {};
 			// Split into key/value pairs
 			let queries = queryString.split("&");
 			// Convert the array of strings into an object
-			for ( let i = 0; i < queries.length; i++ ) {
+			for (let i = 0; i < queries.length; i++) {
 				let temp = queries[i].split('=');
 				params[temp[0]] = temp[1];
 			}
@@ -17,12 +20,31 @@
 		let query = window.location.hash
 		query = query.substring(1); // remove initial hash symbol
 		let params = parseQueryString(query);
+
 		console.log(params);
+
+		$.ajax({
+			type: "GET",
+			url: "https://api.twitch.tv/kraken/user",
+			beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', 'OAuth ' + params.access_token); xhr.setRequestHeader('Client-ID', 'n7lmby1ydq4pmhx95zcolml2d5fqqa'); xhr.setRequestHeader('Accept', 'application/vnd.twitchtv.v5+json'); },
+			success: function (result) {
+				console.log(result);
+
+				$('#username').text('Twitch Username: ' + result.display_name);
+
+				let user_id = result._id;
+
+			},
+			error: function (result) {
+				console.log(result);
+			}
+		});
 
 	</script>
 </head>
+
 <body>
-  <p>Hello!</p>
+	<p id='username'></p>
 </body>
 
 </html>
