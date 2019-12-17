@@ -42,9 +42,9 @@ app.get('/api/savetoken', (req, res) => {
     res.sendStatus(200);
 });
 
-app.get('/api/checkwatchtime', async (req, res) => {
+app.get('/api/checkwatchtime/:username', async (req, res) => {
     
-    let mcUsername = req.body.mcname;
+    let mcUsername = req.params.username;
 
     let twitchUsername = null;
 
