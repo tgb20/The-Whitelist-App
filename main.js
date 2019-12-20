@@ -61,9 +61,11 @@ app.get('/api/checkwatchtime/:username', async (req, res) => {
     let points = json.pointsAlltime;
     
     let hours = Math.floor((points/100) / 6);
-
-    if(isNaN(hours)) {
+    
+    if(twitchUsername == null) {
         res.json({allowed: false, reason:'You have not registered this username (if you have try again in 10 seconds)'});
+    } else if(isNaN(hours)) {
+        res.json({allowed: false, reason:'You are not a viewer of MisterGeof (if you are try again in 10 seconds)'});
     } else if(hours >= 50) {
         res.json({allowed: true});
     } else {
