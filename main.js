@@ -63,11 +63,11 @@ app.get('/api/checkwatchtime/:username', async (req, res) => {
     let hours = Math.floor((points/100) / 6);
 
     if(isNaN(hours)) {
-        res.json({allowed: false, reason:'not registered'});
+        res.json({allowed: false, reason:'You have not registered this username (if you have try again in 10 seconds)'});
     } else if(hours >= 50) {
         res.json({allowed: true});
     } else {
-        res.json({allowed: false, reason: 'only ' + hours + 'hrs'});
+        res.json({allowed: false, reason: 'You only have ' + hours + ' hrs of watch time on MisterGeof'});
     }
 });
 
