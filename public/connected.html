@@ -28,21 +28,21 @@
 
 	<div class="demo-card-square mdl-card mdl-shadow--2dp">
 		<div class="mdl-card__title mdl-card--expand">
-			<h2 class="mdl-card__title-text">Minecraft Username:</h2>
+			<h2 class="mdl-card__title-text">Register Minecraft Username:</h2>
 		</div>
 		<div class="mdl-card__supporting-text">
-			You can change this whenever you want!
+			You can change this if you mistype
 		</div>
 		<div class="mdl-card__actions mdl-card--border">
 			<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
 				<input class="mdl-textfield__input" type="text" id="name" name="name" required>
-				<label class="mdl-textfield__label" for="name">Minecraft Username...</label>
+				<label class="mdl-textfield__label" for="name">Your Minecraft Username...</label>
 			</div>
-			<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" id='save'>Save</button>
+			<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" id='save'>Register</button>
 		</div>
 
 		<dialog class="mdl-dialog">
-			<h4 class="mdl-dialog__title">Saved Twitch Minecraft Link</h4>
+			<h4 class="mdl-dialog__title">Registered Minecraft Username with Twitch</h4>
 			<div class="mdl-dialog__content">
 			  <p id='info'>
 			  </p>
@@ -81,7 +81,7 @@
 				let mcName = $('#name').val();
 
 				$.ajax({ type: "get", url: 'https://the-whitelist-app.herokuapp.com/api/savetoken', data: { token: token, name: mcName }, dataType: "json" });
-				$('#info').text('Saved username ' + mcName);
+				$('#info').text('Registered Minecraft username: ' + mcName);
 				dialog.showModal();
 			});
 
