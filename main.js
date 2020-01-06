@@ -43,8 +43,10 @@ app.get('/api/savetoken', (req, res) => {
 });
 
 app.get('/api/checkwatchtime/:username', async (req, res) => {
-    
+
     let mcUsername = req.params.username;
+
+    console.log(mcUsername);
 
     let twitchUsername = null;
 
@@ -54,22 +56,35 @@ app.get('/api/checkwatchtime/:username', async (req, res) => {
         });
     });
 
-    let response = await fetch('https://api.streamelements.com/kappa/v2/points/5c2c00ec8389306692b43527/' + twitchUsername);
-    let json = await response.json();
-    
+    console.log(twitchUsername);
 
-    let points = json.pointsAlltime;
-    
-    let hours = Math.floor((points/100) / 6);
-    
-    if(twitchUsername == null) {
-        res.json({allowed: false, reason:'You have not registered this username (if you have try again in 10 seconds)'});
-    } else if(isNaN(hours)) {
-        res.json({allowed: false, reason:'You are not a viewer of MisterGeof (if you are try again in 10 seconds)'});
-    } else if(hours >= 50) {
-        res.json({allowed: true});
+    if (twitchUsername != null) {
+        twitchUsername = twitchUsername.toLowerCase();
+    }
+
+    let response = await fetch('https://api.streamelements.com/kappa/v2/points/5c2c00ec8389306692b43527/watchtime?limit=2000');
+
+    let json = await response.json();
+
+    let minutes = 0;
+
+    json.users.forEach(user => {
+        if (user.username == twitchUsername) {
+            console.log(user.minutes);
+            minutes = user.minutes;
+        }
+    });
+
+    let hours = Math.floor((minutes / 60));
+
+    if (twitchUsername == null) {
+        res.json({ allowed: false, reason: 'You have not registered this username (or try again in 10 seconds)' });
+    } else if (hours == 0) {
+        res.json({ allowed: false, reason: 'You have 0 hours of watch time for MisterGeof (or try again in 10 seconds)' });
+    } else if (hours >= 50) {
+        res.json({ allowed: true });
     } else {
-        res.json({allowed: false, reason: 'You only have ' + hours + ' hrs of watch time on MisterGeof'});
+        res.json({ allowed: false, reason: 'You only have ' + hours + ' hrs of watch time for MisterGeof. If you previously could connect this was due to a bug.' });
     }
 });
 
