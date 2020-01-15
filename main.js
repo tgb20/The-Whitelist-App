@@ -82,7 +82,7 @@ app.get('/api/checkwatchtime/:username', async (req, res) => {
     } else if (hours == 0) {
         res.json({ allowed: false, reason: 'You have 0 hours of watch time for MisterGeof (or try again in 10 seconds)' });
     } else if (hours >= 50) {
-        res.json({ allowed: true });
+        res.json({ allowed: true, hours: hours });
     } else {
         res.json({ allowed: false, reason: 'You only have ' + hours + ' hrs of watch time for MisterGeof. If you previously could connect this was due to a bug.' });
     }
