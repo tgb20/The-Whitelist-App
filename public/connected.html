@@ -15,6 +15,13 @@
 			padding: 10px;
 		}
 
+		.reg-card-square.mdl-card {
+			width: 320px;
+			margin: auto;
+			padding: 10px;
+			margin-top: 20px;
+		}
+
 		.demo-card-square>.mdl-card__title {
 			color: #fff;
 			background:
@@ -40,62 +47,48 @@
 			</div>
 			<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" id='save'>Register</button>
 		</div>
+	</div>
 
-		<dialog class="mdl-dialog">
-			<h4 class="mdl-dialog__title">Registered Minecraft Username with Twitch</h4>
-			<div class="mdl-dialog__content">
-			  <p id='info'>
-			  </p>
-				Rules:
-				<ol>
-					<li>Don't Grief</li>
-					<li>No Harassment</li>
-					<li>Do not impede a livestream</li>
-					<li>Respect Land</li>
-					<li>Have common sense</li>
-					<li>Don't lag the server</li>
-					<li>Mods and Admins have final say</li>
-				</ol>
-			</div>
-			<div class="mdl-dialog__actions">
-			  <button id='close' type="button" class="mdl-button">Close</button>
-			</div>
-		  </dialog>
+	<div id="confCard" hidden class="reg-card-square mdl-card mdl-shadow--2dp">
+		<div class="mdl-card__title mdl-card--expand">
+			<h2 class="mdl-card__title-text">Registration Complete</h2>
+		</div>
+		<div class="mdl-card__supporting-text">
+			<div id='info'></div>
+			<a href="https://discord.gg/yj3eJPR">Read the rules on Discord!</a>
+		</div>
+	</div>
 
-		<script>
-			let parseQueryString = function (queryString) {
-				let params = {};
-				// Split into key/value pairs
-				let queries = queryString.split("&");
-				// Convert the array of strings into an object
-				for (let i = 0; i < queries.length; i++) {
-					let temp = queries[i].split('=');
-					params[temp[0]] = temp[1];
-				}
-				return params;
-			};
+	<script>
+		let parseQueryString = function (queryString) {
+			let params = {};
+			// Split into key/value pairs
+			let queries = queryString.split("&");
+			// Convert the array of strings into an object
+			for (let i = 0; i < queries.length; i++) {
+				let temp = queries[i].split('=');
+				params[temp[0]] = temp[1];
+			}
+			return params;
+		};
 
-			let query = window.location.hash
-			query = query.substring(1); // remove initial hash symbol
-			let params = parseQueryString(query);
+		let query = window.location.hash
+		query = query.substring(1); // remove initial hash symbol
+		let params = parseQueryString(query);
 
-			let dialog = document.querySelector('dialog');
+		let confirmation = document.getElementById('confCard');
+		
+		let token = params.id_token;
 
-			let token = params.id_token;
+		$('#save').click(() => {
+			let mcName = $('#name').val();
 
-			$('#close').click(() => {
-				dialog.close();
-			});
+			$.ajax({ type: "get", url: 'https://the-whitelist-app.herokuapp.com/api/savetoken', data: { token: token, name: mcName }, dataType: "json" });
+			$('#info').text('Registered Minecraft username: ' + mcName);
+			confirmation.hidden = false;
+		});
 
-			$('#save').click(() => {
-				let mcName = $('#name').val();
-
-				$.ajax({ type: "get", url: 'https://the-whitelist-app.herokuapp.com/api/savetoken', data: { token: token, name: mcName }, dataType: "json" });
-				$('#info').text('Registered Minecraft username: ' + mcName);
-				dialog.showModal();
-			});
-
-		</script>
+	</script>
 </body>
 
 </html>
